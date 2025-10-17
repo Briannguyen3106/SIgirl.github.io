@@ -1,0 +1,442 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 50%, #ffd4e8 100%);
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Hiệu ứng hoa rơi */
+.flower-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.3;
+}
+
+.flower {
+    position: absolute;
+    font-size: 24px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+    }
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+/* Header */
+header {
+    text-align: center;
+    padding: 40px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    box-shadow: 0 10px 40px rgba(255, 105, 180, 0.2);
+    margin-bottom: 40px;
+    border: 3px solid #ffb6d9;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #ff69b4;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+}
+
+.recipient-name {
+    font-size: 1.8em;
+    color: #ff1493;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.date {
+    font-size: 1.2em;
+    color: #ff69b4;
+    font-weight: bold;
+}
+
+/* Image section */
+.image-section {
+    text-align: center;
+    margin-bottom: 40px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(255, 105, 180, 0.2);
+    border: 3px solid #ffb6d9;
+}
+
+.main-image-container {
+    margin-bottom: 30px;
+}
+
+.main-image {
+    width: 100%;
+    max-width: 500px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 20px;
+    border: 5px solid #ffb6d9;
+    box-shadow: 0 8px 30px rgba(255, 105, 180, 0.3);
+    background: linear-gradient(135deg, #ffe0f0, #ffd4e8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.image-placeholder {
+    color: #ff69b4;
+    font-size: 1.2em;
+    text-align: center;
+    padding: 20px;
+}
+
+.small-images-label {
+    color: #ff69b4;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* Căn giữa label cho các hàng ảnh nhỏ */
+.small-images-label {
+    text-align: center;
+    width: 100%;
+    display: block;
+}
+
+.small-images-container {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 10px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.small-images-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.small-images-container::-webkit-scrollbar-track {
+    background: #ffe0f0;
+    border-radius: 10px;
+}
+
+.small-images-container::-webkit-scrollbar-thumb {
+    background: #ff69b4;
+    border-radius: 10px;
+}
+
+.small-image {
+    width: 150px;
+    height: 150px; /* giữ nguyên kích thước nhỏ */
+    object-fit: cover;
+    border-radius: 15px;
+    border: 3px solid #ffb6d9;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
+    flex-shrink: 0;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background: linear-gradient(135deg, #ffe0f0, #ffd4e8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer; /* giống .wish-card, cho biết có thể click */
+}
+.small-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* Thêm dòng này nếu chưa có */
+}
+.small-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+}
+
+/* Khi small-image được mở (thêm class expanded từ script), tái sử dụng kiểu popup của .wish-card.expanded */
+.small-image.expanded {
+    /* make it a centered popup like .wish-card.expanded but keep inner image sizing intact */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    max-width: 600px;
+    width: 90%;
+    height: auto;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+}
+
+.small-image.expanded::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+}
+
+.small-image.expanded img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.small-placeholder {
+    color: #ff69b4;
+    font-size: 0.9em;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Wishes Section */
+.wishes-section {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(255, 105, 180, 0.2);
+    border: 3px solid #ffb6d9;
+}
+
+.wishes-section h2 {
+    color: #ff69b4;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 2em;
+}
+
+.instruction {
+    text-align: center;
+    color: #ff1493;
+    font-family: Arial, 'Noto Sans', sans-serif;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.wishes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.wish-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wish-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 3px solid #ffb6d9;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ffe0f0, #ffd4e8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wish-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.wish-placeholder {
+    color: #ff69b4;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.wish-card:hover .wish-image {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+}
+
+/* Expanded Card - Popup Style */
+.wish-card.expanded {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    max-width: 600px;
+    width: 90%;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+}
+
+.wish-card.expanded::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+}
+
+.wish-card.expanded .wish-image {
+    width: 100%;
+    height: auto;           /* Tự động điều chỉnh chiều cao */
+    max-height: 500px;      /* Giới hạn chiều cao tối đa */
+    margin-bottom: 20px;
+}
+
+.wish-card.expanded .wish-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;    /* Hiển thị trọn ảnh, không bị cắt */
+}
+.wish-content {
+    display: none;
+    background: linear-gradient(135deg, #fff0f8, #ffe8f3);
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 5px solid #ff69b4;
+    margin-top: 15px;
+    animation: slideDown 0.3s ease;
+}
+
+.wish-card.expanded .wish-content {
+    display: block;
+}
+
+.wish-text {
+    color: #333;
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.wish-sender {
+    text-align: right;
+    color: #ff1493;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.close-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background: linear-gradient(135deg, #ff69b4, #ff1493);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    .recipient-name {
+        font-size: 1.4em;
+    }
+
+    .wishes-section {
+        padding: 20px;
+    }
+
+    .wishes-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+    }
+
+    .wish-image {
+        height: 150px;
+    }
+
+    .wish-card.expanded .wish-image {
+        height: 300px;
+    }
+}
+
+
+
+/* Nút link mới */
+.link-button-container {
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 40px;
+}
+
+.link-button {
+    display: inline-block;
+    padding: 18px 40px;
+    background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 1.2em;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(255, 20, 147, 0.4);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.link-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 20, 147, 0.5);
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+}
+
+.link-button:active {
+    transform: translateY(-1px);
+}
